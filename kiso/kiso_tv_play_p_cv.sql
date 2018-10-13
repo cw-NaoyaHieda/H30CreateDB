@@ -1,0 +1,106 @@
+SELECT
+MAX(len0),
+MAX(len1),
+MAX(action_time),
+MAX(len2),
+MAX(len3),
+MAX(len4),
+MAX(len5),
+MAX(len6),
+MAX(len7),
+MAX(timeshift_time),
+MIN(len0),
+MIN(len1),
+MIN(action_time),
+MIN(len2),
+MIN(len3),
+MIN(len4),
+MIN(len5),
+MIN(len6),
+MIN(len7),
+MIN(timeshift_time),
+COUNT(DISTINCT(action_date)),
+COUNT(DISTINCT(action_day_week)),
+COUNT(DISTINCT(action_time)),
+COUNT(DISTINCT(house_num)),
+COUNT(DISTINCT(ind_num)),
+COUNT(DISTINCT(tv_num)),
+COUNT(DISTINCT(station_code)),
+COUNT(DISTINCT(timeshift_date)),
+COUNT(DISTINCT(timeshift_day_week)),
+COUNT(DISTINCT(timeshift_time)),
+SUM(CASE WHEN action_date IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN action_day_week IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN action_time IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN house_num IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN ind_num IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN tv_num IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN station_code IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_date IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_day_week IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_time IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN action_date='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN action_day_week='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN house_num='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN ind_num='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN tv_num='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN station_code='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_date='' THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_day_week='' THEN 1 ELSE 0 END)
+FROM
+(
+    -- 文字列を長さに変換する仮テーブル
+    SELECT
+        *,
+		    char_length(action_date) AS len0,
+		    char_length(action_day_week) AS len1,
+		    char_length(house_num) AS len2,
+		    char_length(ind_num) AS len3,
+		    char_length(tv_num) AS len4,
+		    char_length(station_code) AS len5,
+		    char_length(timeshift_date) AS len6,
+		    char_length(timeshift_day_week) AS len7
+    FROM
+        original.tv_play_p_cv
+    ) AS length_table;
+
+-- こっからprocessed
+SELECT
+MAX(action_datetime),
+MAX(action_day_week),
+MAX(house_num),
+MAX(tv_num),
+MAX(station_code),
+MAX(timeshift_datetime),
+MAX(timeshift_date_week),
+MAX(action_date),
+
+MIN(action_datetime),
+MIN(action_day_week),
+MIN(house_num),
+MIN(tv_num),
+MIN(station_code),
+MIN(timeshift_datetime),
+MIN(timeshift_date_week),
+MIN(action_date),
+
+COUNT(DISTINCT(action_datetime)),
+COUNT(DISTINCT(action_day_week)),
+COUNT(DISTINCT(house_num)),
+COUNT(DISTINCT(tv_num)),
+COUNT(DISTINCT(station_code)),
+COUNT(DISTINCT(timeshift_datetime)),
+COUNT(DISTINCT(timeshift_date_week)),
+COUNT(DISTINCT(action_date)),
+
+SUM(CASE WHEN action_datetime IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN action_day_week IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN house_num IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN tv_num IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN station_code IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_datetime IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN timeshift_date_week IS NULL THEN 1 ELSE 0 END),
+SUM(CASE WHEN action_date IS NULL THEN 1 ELSE 0 END)
+
+FROM
+  processed.tv_play_p_cv;

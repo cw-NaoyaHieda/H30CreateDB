@@ -1,0 +1,1613 @@
+--
+-- Greenplum Database database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+SET search_path = processed, pg_catalog;
+
+ALTER TABLE ONLY processed.tv_program DROP CONSTRAINT tv_program_station_code_fkey;
+ALTER TABLE ONLY processed.tv_program DROP CONSTRAINT tv_program_sin_toku_fkey;
+ALTER TABLE ONLY processed.tv_program DROP CONSTRAINT tv_program_br_format_fkey;
+ALTER TABLE ONLY processed.tv_program DROP CONSTRAINT tv_program_ban_code1_fkey;
+ALTER TABLE ONLY processed.tv_play_p_cv DROP CONSTRAINT tv_play_p_cv_station_code_fkey;
+ALTER TABLE ONLY processed.tv_play_p_cv DROP CONSTRAINT tv_play_p_cv_action_day_week_fkey;
+ALTER TABLE ONLY processed.tv_play_p_cv DROP CONSTRAINT tv_play_p_cv_action_date_fkey;
+ALTER TABLE ONLY processed.m_cm_tv_brand DROP CONSTRAINT m_cm_tv_brand_adv_code_fkey;
+ALTER TABLE ONLY processed.jiten_data DROP CONSTRAINT jiten_data_station_code_fkey;
+ALTER TABLE ONLY processed.jiten_data DROP CONSTRAINT jiten_data_brand_code_fkey;
+ALTER TABLE ONLY processed.jiten_data DROP CONSTRAINT jiten_data_adv_type_fkey;
+ALTER TABLE ONLY processed.jiten_data DROP CONSTRAINT jiten_data_adv_code_fkey;
+SET search_path = sub_mst, pg_catalog;
+
+ALTER TABLE ONLY sub_mst.tb_flag_mst DROP CONSTRAINT tb_flag_mst_pkey;
+ALTER TABLE ONLY sub_mst.sp_flag_mst DROP CONSTRAINT sp_flag_mst_pkey;
+ALTER TABLE ONLY sub_mst.sin_toku_mst DROP CONSTRAINT sin_toku_mst_pkey;
+ALTER TABLE ONLY sub_mst.pc_flag_mst DROP CONSTRAINT pc_flag_mst_pkey;
+ALTER TABLE ONLY sub_mst.house_hold_mst DROP CONSTRAINT house_hold_mst_pkey;
+ALTER TABLE ONLY sub_mst.day_week_mst DROP CONSTRAINT day_week_mst_pkey;
+ALTER TABLE ONLY sub_mst.data_agg_type_mst DROP CONSTRAINT data_agg_type_mst_pkey;
+ALTER TABLE ONLY sub_mst.br_format_mst DROP CONSTRAINT br_format_mst_pkey;
+ALTER TABLE ONLY sub_mst.adv_type_mst DROP CONSTRAINT adv_type_mst_pkey;
+SET search_path = processed, pg_catalog;
+
+ALTER TABLE ONLY processed.tv_sample_p_cv DROP CONSTRAINT tv_sample_p_cv_pkey;
+ALTER TABLE ONLY processed.tv_program DROP CONSTRAINT tv_program_pkey;
+ALTER TABLE ONLY processed.tv_play_p_cv DROP CONSTRAINT tv_play_p_cv_pkey;
+ALTER TABLE ONLY processed.tv_orgn_p_cv DROP CONSTRAINT tv_orgn_p_cv_pkey;
+ALTER TABLE ONLY processed.sta_mst DROP CONSTRAINT sta_mst_pkey;
+ALTER TABLE ONLY processed.profilemaster DROP CONSTRAINT profilemaster_pkey;
+ALTER TABLE ONLY processed.profiledata DROP CONSTRAINT profiledata_pkey;
+ALTER TABLE ONLY processed.m_cm_tv_brand DROP CONSTRAINT m_cm_tv_brand_pkey;
+ALTER TABLE ONLY processed.m_cm_tv_advertiser DROP CONSTRAINT m_cm_tv_advertiser_pkey;
+ALTER TABLE ONLY processed.job_mst DROP CONSTRAINT job_mst_pkey;
+ALTER TABLE ONLY processed.jiten_data DROP CONSTRAINT jiten_data_pkey;
+ALTER TABLE ONLY processed.bancluster_mst DROP CONSTRAINT bancluster_mst_pkey;
+SET search_path = original, pg_catalog;
+
+ALTER TABLE ONLY original.sta_mst DROP CONSTRAINT sta_mst_pkey;
+ALTER TABLE ONLY original.m_cm_tv_brand DROP CONSTRAINT m_cm_tv_brand_pkey;
+ALTER TABLE ONLY original.job_mst DROP CONSTRAINT job_mst_pkey;
+ALTER TABLE ONLY original.m_cm_tv_advertiser DROP CONSTRAINT "M_CM_TV_ADVERTISER_pkey";
+SET search_path = edit, pg_catalog;
+
+ALTER TABLE ONLY edit.tv_orgn_p_cv DROP CONSTRAINT tv_orgn_p_cv_pkey;
+SET search_path = add_data, pg_catalog;
+
+ALTER TABLE ONLY add_data.top10_rating_tv_tmp DROP CONSTRAINT top10_rating_tv_tmp_pkey;
+ALTER TABLE ONLY add_data.performer DROP CONSTRAINT performer2_pkey;
+SET search_path = sub_mst, pg_catalog;
+
+DROP TABLE sub_mst.tb_flag_mst;
+DROP TABLE sub_mst.sp_flag_mst;
+DROP TABLE sub_mst.sin_toku_mst;
+DROP TABLE sub_mst.pc_flag_mst;
+DROP TABLE sub_mst.house_hold_mst;
+DROP TABLE sub_mst.day_week_mst;
+DROP TABLE sub_mst.data_agg_type_mst;
+DROP TABLE sub_mst.br_format_mst;
+DROP TABLE sub_mst.adv_type_mst;
+SET search_path = processed, pg_catalog;
+
+DROP TABLE processed.tv_sample_p_cv;
+DROP VIEW processed.tv_program_view;
+DROP TABLE processed.tv_program;
+DROP VIEW processed.tv_play_p_cv_view;
+DROP TABLE processed.tv_play_p_cv;
+DROP VIEW processed.tv_orgn_p_cv_view;
+DROP TABLE processed.tv_orgn_p_cv;
+DROP TABLE processed.sta_mst;
+DROP TABLE processed.profilemaster;
+DROP TABLE processed.profiledata;
+DROP TABLE processed.m_cm_tv_brand;
+DROP TABLE processed.m_cm_tv_advertiser;
+DROP TABLE processed.job_mst;
+DROP TABLE processed.jiten_data;
+DROP TABLE processed.bancluster_mst;
+SET search_path = original, pg_catalog;
+
+DROP TABLE original.tv_sample_p_cv;
+DROP TABLE original.tv_program;
+DROP TABLE original.tv_play_p_cv;
+DROP TABLE original.tv_orgn_p_cv;
+DROP TABLE original.t_weblog3;
+DROP TABLE original.t_weblog2;
+DROP TABLE original.sta_mst;
+DROP TABLE original.profilemaster;
+DROP TABLE original.profiledata;
+DROP TABLE original.m_cm_tv_brand;
+DROP TABLE original.m_cm_tv_advertiser;
+DROP TABLE original.job_mst;
+DROP TABLE original.jiten_data;
+DROP TABLE original.bancluster_mst;
+SET search_path = edit, pg_catalog;
+
+DROP TABLE edit.tv_orgn_p_cv;
+SET search_path = add_data, pg_catalog;
+
+DROP TABLE add_data.top10_rating_tv_tmp;
+DROP TABLE add_data.performer;
+DROP SCHEMA sub_mst;
+DROP SCHEMA processed;
+DROP SCHEMA original;
+DROP SCHEMA edit;
+DROP SCHEMA add_data;
+SET default_with_oids = false;
+
+--
+-- Name: add_data; Type: SCHEMA; Schema: -; Owner: naoya
+--
+
+CREATE SCHEMA add_data;
+
+
+ALTER SCHEMA add_data OWNER TO naoya;
+
+--
+-- Name: edit; Type: SCHEMA; Schema: -; Owner: naoya
+--
+
+CREATE SCHEMA edit;
+
+
+ALTER SCHEMA edit OWNER TO naoya;
+
+--
+-- Name: original; Type: SCHEMA; Schema: -; Owner: naoya
+--
+
+CREATE SCHEMA original;
+
+
+ALTER SCHEMA original OWNER TO naoya;
+
+--
+-- Name: SCHEMA original; Type: COMMENT; Schema: -; Owner: naoya
+--
+
+COMMENT ON SCHEMA original IS 'standard public schema';
+
+
+--
+-- Name: processed; Type: SCHEMA; Schema: -; Owner: naoya
+--
+
+CREATE SCHEMA processed;
+
+
+ALTER SCHEMA processed OWNER TO naoya;
+
+--
+-- Name: sub_mst; Type: SCHEMA; Schema: -; Owner: naoya
+--
+
+CREATE SCHEMA sub_mst;
+
+
+ALTER SCHEMA sub_mst OWNER TO naoya;
+
+SET search_path = add_data, pg_catalog;
+
+SET default_tablespace = '';
+
+--
+-- Name: performer; Type: TABLE; Schema: add_data; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE performer (
+    program_name_crow text NOT NULL,
+    br_start_datetime_crow timestamp without time zone NOT NULL,
+    day_week "char",
+    station_jp_crow character(10) NOT NULL,
+    regular text,
+    guest text,
+    koe text,
+    other text,
+    chara text
+) DISTRIBUTED BY (program_name_crow, br_start_datetime_crow, station_jp_crow);
+
+
+ALTER TABLE add_data.performer OWNER TO naoya;
+
+--
+-- Name: top10_rating_tv_tmp; Type: TABLE; Schema: add_data; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE top10_rating_tv_tmp (
+    program_name_crow character(50),
+    station_jp_crow character(6),
+    br_date_crow character(40),
+    br_time_crow character(30),
+    rating real,
+    pg_jenre_crow character(20) NOT NULL,
+    rank_group integer NOT NULL,
+    rank integer NOT NULL
+) DISTRIBUTED BY (pg_jenre_crow, rank_group, rank);
+
+
+ALTER TABLE add_data.top10_rating_tv_tmp OWNER TO naoya;
+
+SET search_path = edit, pg_catalog;
+
+--
+-- Name: tv_orgn_p_cv; Type: TABLE; Schema: edit; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_orgn_p_cv (
+    br_start_datetime timestamp without time zone NOT NULL,
+    br_end_datetime timestamp without time zone NOT NULL,
+    br_day_week integer,
+    house_num character(5) NOT NULL,
+    station_code integer NOT NULL,
+    tv_num integer NOT NULL,
+    br_date date,
+    nama integer,
+    time_shift integer,
+    seq integer
+) DISTRIBUTED BY (br_start_datetime, br_end_datetime, house_num, station_code, tv_num);
+
+
+ALTER TABLE edit.tv_orgn_p_cv OWNER TO naoya;
+
+SET search_path = original, pg_catalog;
+
+--
+-- Name: bancluster_mst; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE bancluster_mst (
+    ban_code1 "char",
+    ban_code2 character(2),
+    ban_code3 character(3),
+    ban_name character(40)
+) DISTRIBUTED BY (ban_code1, ban_code2, ban_code3);
+
+
+ALTER TABLE original.bancluster_mst OWNER TO naoya;
+
+--
+-- Name: jiten_data; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE jiten_data (
+    station_code character(4),
+    cm_date character(8),
+    cm_start_time integer,
+    adv_type character(3),
+    adv_code character(5),
+    brand_code character(8),
+    cm_time integer
+) DISTRIBUTED BY (station_code, cm_date, cm_start_time, adv_code, brand_code);
+
+
+ALTER TABLE original.jiten_data OWNER TO naoya;
+
+--
+-- Name: job_mst; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE job_mst (
+    job_code character varying(2) NOT NULL,
+    job character varying(20) NOT NULL
+) DISTRIBUTED BY (job_code, job);
+
+
+ALTER TABLE original.job_mst OWNER TO naoya;
+
+--
+-- Name: m_cm_tv_advertiser; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE m_cm_tv_advertiser (
+    adv_code character(5) NOT NULL,
+    adv_kana character(40),
+    adv_name character(50),
+    adv_start integer,
+    adv_lastup integer
+) DISTRIBUTED BY (adv_code);
+
+
+ALTER TABLE original.m_cm_tv_advertiser OWNER TO naoya;
+
+--
+-- Name: m_cm_tv_brand; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE m_cm_tv_brand (
+    brand_code character(8) NOT NULL,
+    adv_code character(5),
+    brand_kana character(60),
+    brand_name character(60),
+    brand_start integer,
+    brand_lastup integer
+) DISTRIBUTED BY (brand_code);
+
+
+ALTER TABLE original.m_cm_tv_brand OWNER TO naoya;
+
+--
+-- Name: profiledata; Type: TABLE; Schema: original; Owner: m1; Tablespace: 
+--
+
+CREATE TABLE profiledata (
+    house_num character(10),
+    ind_num character(10),
+    qu_genre_code character(10),
+    question_code character(10),
+    answer_code character(10)
+) DISTRIBUTED BY (house_num, ind_num, qu_genre_code, question_code, answer_code);
+
+
+ALTER TABLE original.profiledata OWNER TO m1;
+
+--
+-- Name: profilemaster; Type: TABLE; Schema: original; Owner: m1; Tablespace: 
+--
+
+CREATE TABLE profilemaster (
+    qu_genre_code character(100),
+    qu_genre character(100),
+    question_code character(100),
+    question character(100),
+    question_type character(100),
+    answer_code character(100),
+    answer character(100)
+) DISTRIBUTED BY (qu_genre_code, question_code, answer_code);
+
+
+ALTER TABLE original.profilemaster OWNER TO m1;
+
+--
+-- Name: sta_mst; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE sta_mst (
+    station_code character(4) NOT NULL,
+    station_jp character(12) NOT NULL,
+    station_ab character(4) NOT NULL
+) DISTRIBUTED BY (station_code);
+
+
+ALTER TABLE original.sta_mst OWNER TO naoya;
+
+--
+-- Name: t_weblog2; Type: TABLE; Schema: original; Owner: m1; Tablespace: 
+--
+
+CREATE TABLE t_weblog2 (
+    house_num character(100),
+    ind_num character(100),
+    web_date character(100),
+    web_start_time character(100),
+    pc_flag character(100),
+    sp_flag character(100),
+    tb_flag character(100),
+    url text,
+    domain text,
+    sub_domain character(100),
+    user_agent text,
+    referrer text,
+    referrer_domain character(100),
+    web_title text,
+    web_time character(100)
+) DISTRIBUTED BY (house_num);
+
+
+ALTER TABLE original.t_weblog2 OWNER TO m1;
+
+--
+-- Name: t_weblog3; Type: TABLE; Schema: original; Owner: m1; Tablespace: 
+--
+
+CREATE TABLE t_weblog3 (
+    house_num character(100),
+    ind_num character(100),
+    web_date character(100),
+    web_start_time character(100),
+    pc_flag character(100),
+    sp_flag character(100),
+    tb_flag character(100),
+    url text,
+    domain text,
+    sub_domain character(100),
+    user_agent text,
+    referrer text,
+    referrer_domain character(100),
+    web_title text,
+    web_time character(100)
+) DISTRIBUTED BY (house_num);
+
+
+ALTER TABLE original.t_weblog3 OWNER TO m1;
+
+--
+-- Name: tv_orgn_p_cv; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_orgn_p_cv (
+    br_date character(10),
+    br_day_week character(2),
+    house_num character(5),
+    ind_num character(2),
+    start_time character(5),
+    end_time character(5),
+    station_code character(4),
+    tv_num character(2),
+    data_agg_type character(2),
+    dataseq character(4)
+) DISTRIBUTED BY (br_date);
+
+
+ALTER TABLE original.tv_orgn_p_cv OWNER TO naoya;
+
+--
+-- Name: tv_play_p_cv; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_play_p_cv (
+    action_date character(10),
+    action_day_week character(2),
+    action_time character(4),
+    house_num character(5),
+    ind_num character(2),
+    tv_num character(2),
+    station_code character(4),
+    timeshift_date character(10),
+    timeshift_day_week character(2),
+    timeshift_time character(4)
+) DISTRIBUTED BY (action_date);
+
+
+ALTER TABLE original.tv_play_p_cv OWNER TO naoya;
+
+--
+-- Name: tv_program; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_program (
+    station_code character(4),
+    program_code character(4),
+    program_day_week character(2),
+    program_date character(10),
+    program_start_time integer,
+    program_time integer,
+    progmra_end_time integer,
+    ban_code1 character(2),
+    ban_code2 character(2),
+    ban_code3 character(3),
+    sin_toku character(1),
+    br_format character(2),
+    final_code character(1),
+    program_name character(50),
+    program_name_kana character(50)
+) DISTRIBUTED BY (station_code);
+
+
+ALTER TABLE original.tv_program OWNER TO naoya;
+
+--
+-- Name: tv_sample_p_cv; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_sample_p_cv (
+    sample_date character(10),
+    house_num character(10),
+    ind_num integer,
+    house_hold integer,
+    sex integer,
+    marriage integer,
+    age integer,
+    job_code character(10)
+) DISTRIBUTED BY (sample_date);
+
+
+ALTER TABLE original.tv_sample_p_cv OWNER TO naoya;
+
+SET search_path = processed, pg_catalog;
+
+--
+-- Name: bancluster_mst; Type: TABLE; Schema: processed; Owner: b4; Tablespace: 
+--
+
+CREATE TABLE bancluster_mst (
+    ban_code1 integer NOT NULL,
+    ban_code2 integer NOT NULL,
+    ban_code3 character(3) NOT NULL,
+    ban_name character(31)
+) DISTRIBUTED BY (ban_code1, ban_code2, ban_code3);
+
+
+ALTER TABLE processed.bancluster_mst OWNER TO b4;
+
+--
+-- Name: jiten_data; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE jiten_data (
+    station_code integer NOT NULL,
+    cm_date date,
+    cm_start_time timestamp without time zone NOT NULL,
+    adv_type integer,
+    adv_code character(5),
+    brand_code character(8),
+    cm_time integer
+) DISTRIBUTED BY (station_code, cm_start_time);
+
+
+ALTER TABLE processed.jiten_data OWNER TO naoya;
+
+--
+-- Name: job_mst; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE job_mst (
+    job_code integer NOT NULL,
+    job character varying(20)
+) DISTRIBUTED BY (job_code);
+
+
+ALTER TABLE processed.job_mst OWNER TO naoya;
+
+--
+-- Name: m_cm_tv_advertiser; Type: TABLE; Schema: processed; Owner: b4; Tablespace: 
+--
+
+CREATE TABLE m_cm_tv_advertiser (
+    adv_code character(5) NOT NULL,
+    adv_kana character(35),
+    adv_name character(38),
+    adv_start date,
+    adv_lastup date
+) DISTRIBUTED BY (adv_code);
+
+
+ALTER TABLE processed.m_cm_tv_advertiser OWNER TO b4;
+
+--
+-- Name: m_cm_tv_brand; Type: TABLE; Schema: processed; Owner: b4; Tablespace: 
+--
+
+CREATE TABLE m_cm_tv_brand (
+    brand_code character(8) NOT NULL,
+    adv_code character(5),
+    brand_kana character(53),
+    brand_name character(57),
+    brand_start date,
+    brand_lastup date
+) DISTRIBUTED BY (brand_code);
+
+
+ALTER TABLE processed.m_cm_tv_brand OWNER TO b4;
+
+--
+-- Name: profiledata; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE profiledata (
+    house_num integer NOT NULL,
+    qu_genre_code integer NOT NULL,
+    question_code integer NOT NULL,
+    answer_code integer NOT NULL
+) DISTRIBUTED BY (house_num, qu_genre_code, question_code, answer_code);
+
+
+ALTER TABLE processed.profiledata OWNER TO naoya;
+
+--
+-- Name: profilemaster; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE profilemaster (
+    qu_genre_code integer NOT NULL,
+    qu_genre character(33),
+    question_code integer NOT NULL,
+    question character(57),
+    question_type character(2),
+    answer_code integer NOT NULL,
+    answer character(65)
+) DISTRIBUTED BY (qu_genre_code, question_code, answer_code);
+
+
+ALTER TABLE processed.profilemaster OWNER TO naoya;
+
+--
+-- Name: sta_mst; Type: TABLE; Schema: processed; Owner: b4; Tablespace: 
+--
+
+CREATE TABLE sta_mst (
+    station_code integer NOT NULL,
+    station_jp character(6),
+    station_ab character(4)
+) DISTRIBUTED BY (station_code);
+
+
+ALTER TABLE processed.sta_mst OWNER TO b4;
+
+--
+-- Name: tv_orgn_p_cv; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_orgn_p_cv (
+    br_start_datetime timestamp without time zone NOT NULL,
+    br_end_datetime timestamp without time zone NOT NULL,
+    br_day_week integer,
+    house_num character(5) NOT NULL,
+    station_code integer NOT NULL,
+    tv_num integer NOT NULL,
+    data_agg_type integer NOT NULL,
+    dataseq integer NOT NULL,
+    br_date date
+) DISTRIBUTED BY (br_start_datetime, br_end_datetime, house_num, station_code, tv_num, data_agg_type, dataseq);
+
+
+ALTER TABLE processed.tv_orgn_p_cv OWNER TO naoya;
+
+--
+-- Name: tv_orgn_p_cv_view; Type: VIEW; Schema: processed; Owner: naoya
+--
+
+CREATE VIEW tv_orgn_p_cv_view AS
+    SELECT CASE WHEN (to_number((tv_orgn_p_cv.start_time)::text, '9999'::text) >= (2500)::numeric) THEN (to_timestamp((((tv_orgn_p_cv.br_date)::text || '0'::text) || btrim(to_char((to_number((tv_orgn_p_cv.start_time)::text, '9999'::text) - (2400)::numeric), '999'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_orgn_p_cv.start_time)::text, '9999'::text) >= (2410)::numeric) THEN (to_timestamp((((tv_orgn_p_cv.br_date)::text || '00'::text) || btrim(to_char((to_number((tv_orgn_p_cv.start_time)::text, '9999'::text) - (2400)::numeric), '99'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_orgn_p_cv.start_time)::text, '9999'::text) >= (2400)::numeric) THEN (to_timestamp((((tv_orgn_p_cv.br_date)::text || '000'::text) || btrim(to_char((to_number((tv_orgn_p_cv.start_time)::text, '9999'::text) - (2400)::numeric), '9'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) ELSE to_timestamp(((tv_orgn_p_cv.br_date)::text || (tv_orgn_p_cv.start_time)::text), 'YYYY-MM-DDHH24MI'::text) END AS br_start_datetime, CASE WHEN (to_number((tv_orgn_p_cv.end_time)::text, '9999'::text) >= (2500)::numeric) THEN (to_timestamp((((tv_orgn_p_cv.br_date)::text || '0'::text) || btrim(to_char((to_number((tv_orgn_p_cv.end_time)::text, '9999'::text) - (2400)::numeric), '999'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_orgn_p_cv.end_time)::text, '9999'::text) >= (2410)::numeric) THEN (to_timestamp((((tv_orgn_p_cv.br_date)::text || '00'::text) || btrim(to_char((to_number((tv_orgn_p_cv.end_time)::text, '9999'::text) - (2400)::numeric), '99'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_orgn_p_cv.end_time)::text, '9999'::text) >= (2400)::numeric) THEN (to_timestamp((((tv_orgn_p_cv.br_date)::text || '000'::text) || btrim(to_char((to_number((tv_orgn_p_cv.end_time)::text, '9999'::text) - (2400)::numeric), '9'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) ELSE to_timestamp(((tv_orgn_p_cv.br_date)::text || (tv_orgn_p_cv.end_time)::text), 'YYYY-MM-DDHH24MI'::text) END AS br_end_datetime, to_number((tv_orgn_p_cv.br_day_week)::text, '9'::text) AS br_day_week, tv_orgn_p_cv.house_num, to_number((tv_orgn_p_cv.station_code)::text, '9999'::text) AS station_code, to_number((tv_orgn_p_cv.tv_num)::text, '99'::text) AS tv_num, to_number((tv_orgn_p_cv.data_agg_type)::text, '99'::text) AS data_agg_type, row_number() OVER(PARTITION BY tv_orgn_p_cv.br_date, tv_orgn_p_cv.start_time, tv_orgn_p_cv.house_num, tv_orgn_p_cv.station_code, tv_orgn_p_cv.tv_num, tv_orgn_p_cv.data_agg_type ORDER BY tv_orgn_p_cv.data_agg_type) AS dataseq, to_date((tv_orgn_p_cv.br_date)::text, 'YYYY-MM-DD'::text) AS to_date FROM original.tv_orgn_p_cv WHERE (tv_orgn_p_cv.house_num IS NULL);
+
+
+ALTER TABLE processed.tv_orgn_p_cv_view OWNER TO naoya;
+
+--
+-- Name: tv_play_p_cv; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_play_p_cv (
+    action_datetime timestamp without time zone NOT NULL,
+    action_day_week integer,
+    house_num character(5) NOT NULL,
+    tv_num integer,
+    station_code integer,
+    timeshift_datetime timestamp without time zone,
+    timeshift_date_week integer,
+    action_date date,
+    timeshift_date date
+) DISTRIBUTED BY (action_datetime, house_num);
+
+
+ALTER TABLE processed.tv_play_p_cv OWNER TO naoya;
+
+--
+-- Name: tv_play_p_cv_view; Type: VIEW; Schema: processed; Owner: naoya
+--
+
+CREATE VIEW tv_play_p_cv_view AS
+    SELECT CASE WHEN (to_number((tv_play_p_cv.action_time)::text, '9999'::text) >= (2500)::numeric) THEN (to_timestamp((((tv_play_p_cv.action_date)::text || '0'::text) || btrim(to_char((to_number((tv_play_p_cv.action_time)::text, '9999'::text) - (2400)::numeric), '999'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_play_p_cv.action_time)::text, '9999'::text) >= (2410)::numeric) THEN (to_timestamp((((tv_play_p_cv.action_date)::text || '00'::text) || btrim(to_char((to_number((tv_play_p_cv.action_time)::text, '9999'::text) - (2400)::numeric), '99'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_play_p_cv.action_time)::text, '9999'::text) >= (2400)::numeric) THEN (to_timestamp((((tv_play_p_cv.action_date)::text || '000'::text) || btrim(to_char((to_number((tv_play_p_cv.action_time)::text, '9999'::text) - (2400)::numeric), '9'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) ELSE to_timestamp(((tv_play_p_cv.action_date)::text || (tv_play_p_cv.action_time)::text), 'YYYY-MM-DDHH24MI'::text) END AS action_datetime, to_number((tv_play_p_cv.action_day_week)::text, '9'::text) AS action_day_week, tv_play_p_cv.house_num, to_number((tv_play_p_cv.tv_num)::text, '99'::text) AS tv_num, to_number((tv_play_p_cv.station_code)::text, '9999'::text) AS station_code, CASE WHEN (to_number((tv_play_p_cv.timeshift_time)::text, '9999'::text) >= (2500)::numeric) THEN (to_timestamp((((tv_play_p_cv.timeshift_date)::text || '0'::text) || btrim(to_char((to_number((tv_play_p_cv.timeshift_time)::text, '9999'::text) - (2400)::numeric), '999'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_play_p_cv.timeshift_time)::text, '9999'::text) >= (2410)::numeric) THEN (to_timestamp((((tv_play_p_cv.timeshift_date)::text || '00'::text) || btrim(to_char((to_number((tv_play_p_cv.timeshift_time)::text, '9999'::text) - (2400)::numeric), '99'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) WHEN (to_number((tv_play_p_cv.timeshift_time)::text, '9999'::text) >= (2400)::numeric) THEN (to_timestamp((((tv_play_p_cv.timeshift_date)::text || '000'::text) || btrim(to_char((to_number((tv_play_p_cv.timeshift_time)::text, '9999'::text) - (2400)::numeric), '9'::text))), 'YYYY-MM-DDHH24MI'::text) + '1 day'::interval) ELSE to_timestamp(((tv_play_p_cv.timeshift_date)::text || (tv_play_p_cv.timeshift_time)::text), 'YYYY-MM-DDHH24MI'::text) END AS timeshift_datetime, to_number((tv_play_p_cv.timeshift_day_week)::text, '9'::text) AS timeshift_date_week, to_date((tv_play_p_cv.action_date)::text, 'YYYY-MM-DD'::text) AS action_date FROM original.tv_play_p_cv WHERE (tv_play_p_cv.house_num IS NULL);
+
+
+ALTER TABLE processed.tv_play_p_cv_view OWNER TO naoya;
+
+--
+-- Name: tv_program; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_program (
+    station_code integer NOT NULL,
+    program_code character(4) NOT NULL,
+    program_day_week integer,
+    program_date date NOT NULL,
+    program_start_time timestamp without time zone,
+    program_time integer,
+    program_end_time timestamp without time zone,
+    ban_code1 integer,
+    ban_code2 integer,
+    ban_code3 character(3),
+    sin_toku character(1),
+    br_format integer,
+    final_code integer,
+    program_name character(41),
+    program_name_kana character(20)
+) DISTRIBUTED BY (station_code, program_code, program_date);
+
+
+ALTER TABLE processed.tv_program OWNER TO naoya;
+
+--
+-- Name: tv_program_view; Type: VIEW; Schema: processed; Owner: naoya
+--
+
+CREATE VIEW tv_program_view AS
+    SELECT tv_program.station_code, tv_program.program_code, tv_program.program_day_week, tv_program.program_date, tv_program.program_start_time, tv_program.program_time, tv_program.progmra_end_time, tv_program.ban_code1, tv_program.ban_code2, tv_program.ban_code3, tv_program.sin_toku, tv_program.br_format, tv_program.final_code, tv_program.program_name, tv_program.program_name_kana FROM original.tv_program WHERE (tv_program.program_name = '空き'::bpchar);
+
+
+ALTER TABLE processed.tv_program_view OWNER TO naoya;
+
+--
+-- Name: tv_sample_p_cv; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_sample_p_cv (
+    sample_date date NOT NULL,
+    house_num character(5) NOT NULL,
+    house_hold integer,
+    sex integer,
+    marriage integer,
+    age integer,
+    job_code integer
+) DISTRIBUTED BY (sample_date, house_num);
+
+
+ALTER TABLE processed.tv_sample_p_cv OWNER TO naoya;
+
+SET search_path = sub_mst, pg_catalog;
+
+--
+-- Name: adv_type_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE adv_type_mst (
+    adv_type integer NOT NULL,
+    adv_type_name character(6)
+) DISTRIBUTED BY (adv_type);
+
+
+ALTER TABLE sub_mst.adv_type_mst OWNER TO naoya;
+
+--
+-- Name: br_format_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE br_format_mst (
+    br_format integer NOT NULL,
+    br_format_naiyou character(10)
+) DISTRIBUTED BY (br_format);
+
+
+ALTER TABLE sub_mst.br_format_mst OWNER TO naoya;
+
+--
+-- Name: data_agg_type_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE data_agg_type_mst (
+    data_agg_type integer NOT NULL,
+    data_agg_type_name character(6)
+) DISTRIBUTED BY (data_agg_type);
+
+
+ALTER TABLE sub_mst.data_agg_type_mst OWNER TO naoya;
+
+--
+-- Name: day_week_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE day_week_mst (
+    day_week integer NOT NULL,
+    day_week_name character(1)
+) DISTRIBUTED BY (day_week);
+
+
+ALTER TABLE sub_mst.day_week_mst OWNER TO naoya;
+
+--
+-- Name: house_hold_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE house_hold_mst (
+    house_hold integer NOT NULL,
+    house_hold_naiyou character(6)
+) DISTRIBUTED BY (house_hold);
+
+
+ALTER TABLE sub_mst.house_hold_mst OWNER TO naoya;
+
+--
+-- Name: pc_flag_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE pc_flag_mst (
+    pc_flag integer NOT NULL,
+    pc character(7)
+) DISTRIBUTED BY (pc_flag);
+
+
+ALTER TABLE sub_mst.pc_flag_mst OWNER TO naoya;
+
+--
+-- Name: sin_toku_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE sin_toku_mst (
+    sin_toku character(1) NOT NULL,
+    sin_toku_naiyou character(7)
+) DISTRIBUTED BY (sin_toku);
+
+
+ALTER TABLE sub_mst.sin_toku_mst OWNER TO naoya;
+
+--
+-- Name: sp_flag_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE sp_flag_mst (
+    sp_flag integer NOT NULL,
+    sp character(7)
+) DISTRIBUTED BY (sp_flag);
+
+
+ALTER TABLE sub_mst.sp_flag_mst OWNER TO naoya;
+
+--
+-- Name: tb_flag_mst; Type: TABLE; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tb_flag_mst (
+    tb_flag integer NOT NULL,
+    tb character(7)
+) DISTRIBUTED BY (tb_flag);
+
+
+ALTER TABLE sub_mst.tb_flag_mst OWNER TO naoya;
+
+SET search_path = add_data, pg_catalog;
+
+--
+-- Data for Name: performer; Type: TABLE DATA; Schema: add_data; Owner: naoya
+--
+
+COPY performer (program_name_crow, br_start_datetime_crow, day_week, station_jp_crow, regular, guest, koe, other, chara) FROM stdin;
+\.
+
+
+--
+-- Data for Name: top10_rating_tv_tmp; Type: TABLE DATA; Schema: add_data; Owner: naoya
+--
+
+COPY top10_rating_tv_tmp (program_name_crow, station_jp_crow, br_date_crow, br_time_crow, rating, pg_jenre_crow, rank_group, rank) FROM stdin;
+\.
+
+
+SET search_path = edit, pg_catalog;
+
+--
+-- Data for Name: tv_orgn_p_cv; Type: TABLE DATA; Schema: edit; Owner: naoya
+--
+
+COPY tv_orgn_p_cv (br_start_datetime, br_end_datetime, br_day_week, house_num, station_code, tv_num, br_date, nama, time_shift, seq) FROM stdin;
+\.
+
+
+SET search_path = original, pg_catalog;
+
+--
+-- Data for Name: bancluster_mst; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY bancluster_mst (ban_code1, ban_code2, ban_code3, ban_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: jiten_data; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY jiten_data (station_code, cm_date, cm_start_time, adv_type, adv_code, brand_code, cm_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: job_mst; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY job_mst (job_code, job) FROM stdin;
+\.
+
+
+--
+-- Data for Name: m_cm_tv_advertiser; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY m_cm_tv_advertiser (adv_code, adv_kana, adv_name, adv_start, adv_lastup) FROM stdin;
+\.
+
+
+--
+-- Data for Name: m_cm_tv_brand; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY m_cm_tv_brand (brand_code, adv_code, brand_kana, brand_name, brand_start, brand_lastup) FROM stdin;
+\.
+
+
+--
+-- Data for Name: profiledata; Type: TABLE DATA; Schema: original; Owner: m1
+--
+
+COPY profiledata (house_num, ind_num, qu_genre_code, question_code, answer_code) FROM stdin;
+\.
+
+
+--
+-- Data for Name: profilemaster; Type: TABLE DATA; Schema: original; Owner: m1
+--
+
+COPY profilemaster (qu_genre_code, qu_genre, question_code, question, question_type, answer_code, answer) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sta_mst; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY sta_mst (station_code, station_jp, station_ab) FROM stdin;
+\.
+
+
+--
+-- Data for Name: t_weblog2; Type: TABLE DATA; Schema: original; Owner: m1
+--
+
+COPY t_weblog2 (house_num, ind_num, web_date, web_start_time, pc_flag, sp_flag, tb_flag, url, domain, sub_domain, user_agent, referrer, referrer_domain, web_title, web_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: t_weblog3; Type: TABLE DATA; Schema: original; Owner: m1
+--
+
+COPY t_weblog3 (house_num, ind_num, web_date, web_start_time, pc_flag, sp_flag, tb_flag, url, domain, sub_domain, user_agent, referrer, referrer_domain, web_title, web_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_orgn_p_cv; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY tv_orgn_p_cv (br_date, br_day_week, house_num, ind_num, start_time, end_time, station_code, tv_num, data_agg_type, dataseq) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_play_p_cv; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY tv_play_p_cv (action_date, action_day_week, action_time, house_num, ind_num, tv_num, station_code, timeshift_date, timeshift_day_week, timeshift_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_program; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY tv_program (station_code, program_code, program_day_week, program_date, program_start_time, program_time, progmra_end_time, ban_code1, ban_code2, ban_code3, sin_toku, br_format, final_code, program_name, program_name_kana) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_sample_p_cv; Type: TABLE DATA; Schema: original; Owner: naoya
+--
+
+COPY tv_sample_p_cv (sample_date, house_num, ind_num, house_hold, sex, marriage, age, job_code) FROM stdin;
+\.
+
+
+SET search_path = processed, pg_catalog;
+
+--
+-- Data for Name: bancluster_mst; Type: TABLE DATA; Schema: processed; Owner: b4
+--
+
+COPY bancluster_mst (ban_code1, ban_code2, ban_code3, ban_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: jiten_data; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY jiten_data (station_code, cm_date, cm_start_time, adv_type, adv_code, brand_code, cm_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: job_mst; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY job_mst (job_code, job) FROM stdin;
+\.
+
+
+--
+-- Data for Name: m_cm_tv_advertiser; Type: TABLE DATA; Schema: processed; Owner: b4
+--
+
+COPY m_cm_tv_advertiser (adv_code, adv_kana, adv_name, adv_start, adv_lastup) FROM stdin;
+\.
+
+
+--
+-- Data for Name: m_cm_tv_brand; Type: TABLE DATA; Schema: processed; Owner: b4
+--
+
+COPY m_cm_tv_brand (brand_code, adv_code, brand_kana, brand_name, brand_start, brand_lastup) FROM stdin;
+\.
+
+
+--
+-- Data for Name: profiledata; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY profiledata (house_num, qu_genre_code, question_code, answer_code) FROM stdin;
+\.
+
+
+--
+-- Data for Name: profilemaster; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY profilemaster (qu_genre_code, qu_genre, question_code, question, question_type, answer_code, answer) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sta_mst; Type: TABLE DATA; Schema: processed; Owner: b4
+--
+
+COPY sta_mst (station_code, station_jp, station_ab) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_orgn_p_cv; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY tv_orgn_p_cv (br_start_datetime, br_end_datetime, br_day_week, house_num, station_code, tv_num, data_agg_type, dataseq, br_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_play_p_cv; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY tv_play_p_cv (action_datetime, action_day_week, house_num, tv_num, station_code, timeshift_datetime, timeshift_date_week, action_date, timeshift_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_program; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY tv_program (station_code, program_code, program_day_week, program_date, program_start_time, program_time, program_end_time, ban_code1, ban_code2, ban_code3, sin_toku, br_format, final_code, program_name, program_name_kana) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tv_sample_p_cv; Type: TABLE DATA; Schema: processed; Owner: naoya
+--
+
+COPY tv_sample_p_cv (sample_date, house_num, house_hold, sex, marriage, age, job_code) FROM stdin;
+\.
+
+
+SET search_path = sub_mst, pg_catalog;
+
+--
+-- Data for Name: adv_type_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY adv_type_mst (adv_type, adv_type_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: br_format_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY br_format_mst (br_format, br_format_naiyou) FROM stdin;
+\.
+
+
+--
+-- Data for Name: data_agg_type_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY data_agg_type_mst (data_agg_type, data_agg_type_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: day_week_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY day_week_mst (day_week, day_week_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: house_hold_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY house_hold_mst (house_hold, house_hold_naiyou) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pc_flag_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY pc_flag_mst (pc_flag, pc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sin_toku_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY sin_toku_mst (sin_toku, sin_toku_naiyou) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sp_flag_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY sp_flag_mst (sp_flag, sp) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tb_flag_mst; Type: TABLE DATA; Schema: sub_mst; Owner: naoya
+--
+
+COPY tb_flag_mst (tb_flag, tb) FROM stdin;
+\.
+
+
+SET search_path = add_data, pg_catalog;
+
+--
+-- Name: performer2_pkey; Type: CONSTRAINT; Schema: add_data; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY performer
+    ADD CONSTRAINT performer2_pkey PRIMARY KEY (program_name_crow, br_start_datetime_crow, station_jp_crow);
+
+
+--
+-- Name: top10_rating_tv_tmp_pkey; Type: CONSTRAINT; Schema: add_data; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY top10_rating_tv_tmp
+    ADD CONSTRAINT top10_rating_tv_tmp_pkey PRIMARY KEY (pg_jenre_crow, rank_group, rank);
+
+
+SET search_path = edit, pg_catalog;
+
+--
+-- Name: tv_orgn_p_cv_pkey; Type: CONSTRAINT; Schema: edit; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY tv_orgn_p_cv
+    ADD CONSTRAINT tv_orgn_p_cv_pkey PRIMARY KEY (br_start_datetime, br_end_datetime, house_num, station_code, tv_num);
+
+
+SET search_path = original, pg_catalog;
+
+--
+-- Name: M_CM_TV_ADVERTISER_pkey; Type: CONSTRAINT; Schema: original; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY m_cm_tv_advertiser
+    ADD CONSTRAINT "M_CM_TV_ADVERTISER_pkey" PRIMARY KEY (adv_code);
+
+
+--
+-- Name: job_mst_pkey; Type: CONSTRAINT; Schema: original; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY job_mst
+    ADD CONSTRAINT job_mst_pkey PRIMARY KEY (job_code, job);
+
+
+--
+-- Name: m_cm_tv_brand_pkey; Type: CONSTRAINT; Schema: original; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY m_cm_tv_brand
+    ADD CONSTRAINT m_cm_tv_brand_pkey PRIMARY KEY (brand_code);
+
+
+--
+-- Name: sta_mst_pkey; Type: CONSTRAINT; Schema: original; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY sta_mst
+    ADD CONSTRAINT sta_mst_pkey PRIMARY KEY (station_code);
+
+
+SET search_path = processed, pg_catalog;
+
+--
+-- Name: bancluster_mst_pkey; Type: CONSTRAINT; Schema: processed; Owner: b4; Tablespace: 
+--
+
+ALTER TABLE ONLY bancluster_mst
+    ADD CONSTRAINT bancluster_mst_pkey PRIMARY KEY (ban_code1, ban_code2, ban_code3);
+
+
+--
+-- Name: jiten_data_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY jiten_data
+    ADD CONSTRAINT jiten_data_pkey PRIMARY KEY (station_code, cm_start_time);
+
+
+--
+-- Name: job_mst_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY job_mst
+    ADD CONSTRAINT job_mst_pkey PRIMARY KEY (job_code);
+
+
+--
+-- Name: m_cm_tv_advertiser_pkey; Type: CONSTRAINT; Schema: processed; Owner: b4; Tablespace: 
+--
+
+ALTER TABLE ONLY m_cm_tv_advertiser
+    ADD CONSTRAINT m_cm_tv_advertiser_pkey PRIMARY KEY (adv_code);
+
+
+--
+-- Name: m_cm_tv_brand_pkey; Type: CONSTRAINT; Schema: processed; Owner: b4; Tablespace: 
+--
+
+ALTER TABLE ONLY m_cm_tv_brand
+    ADD CONSTRAINT m_cm_tv_brand_pkey PRIMARY KEY (brand_code);
+
+
+--
+-- Name: profiledata_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY profiledata
+    ADD CONSTRAINT profiledata_pkey PRIMARY KEY (house_num, qu_genre_code, question_code, answer_code);
+
+
+--
+-- Name: profilemaster_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY profilemaster
+    ADD CONSTRAINT profilemaster_pkey PRIMARY KEY (qu_genre_code, question_code, answer_code);
+
+
+--
+-- Name: sta_mst_pkey; Type: CONSTRAINT; Schema: processed; Owner: b4; Tablespace: 
+--
+
+ALTER TABLE ONLY sta_mst
+    ADD CONSTRAINT sta_mst_pkey PRIMARY KEY (station_code);
+
+
+--
+-- Name: tv_orgn_p_cv_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY tv_orgn_p_cv
+    ADD CONSTRAINT tv_orgn_p_cv_pkey PRIMARY KEY (br_start_datetime, br_end_datetime, house_num, station_code, tv_num, data_agg_type, dataseq);
+
+
+--
+-- Name: tv_play_p_cv_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY tv_play_p_cv
+    ADD CONSTRAINT tv_play_p_cv_pkey PRIMARY KEY (action_datetime, house_num);
+
+
+--
+-- Name: tv_program_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY tv_program
+    ADD CONSTRAINT tv_program_pkey PRIMARY KEY (station_code, program_code, program_date);
+
+
+--
+-- Name: tv_sample_p_cv_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY tv_sample_p_cv
+    ADD CONSTRAINT tv_sample_p_cv_pkey PRIMARY KEY (sample_date, house_num);
+
+
+SET search_path = sub_mst, pg_catalog;
+
+--
+-- Name: adv_type_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY adv_type_mst
+    ADD CONSTRAINT adv_type_mst_pkey PRIMARY KEY (adv_type);
+
+
+--
+-- Name: br_format_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY br_format_mst
+    ADD CONSTRAINT br_format_mst_pkey PRIMARY KEY (br_format);
+
+
+--
+-- Name: data_agg_type_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY data_agg_type_mst
+    ADD CONSTRAINT data_agg_type_mst_pkey PRIMARY KEY (data_agg_type);
+
+
+--
+-- Name: day_week_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY day_week_mst
+    ADD CONSTRAINT day_week_mst_pkey PRIMARY KEY (day_week);
+
+
+--
+-- Name: house_hold_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY house_hold_mst
+    ADD CONSTRAINT house_hold_mst_pkey PRIMARY KEY (house_hold);
+
+
+--
+-- Name: pc_flag_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY pc_flag_mst
+    ADD CONSTRAINT pc_flag_mst_pkey PRIMARY KEY (pc_flag);
+
+
+--
+-- Name: sin_toku_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY sin_toku_mst
+    ADD CONSTRAINT sin_toku_mst_pkey PRIMARY KEY (sin_toku);
+
+
+--
+-- Name: sp_flag_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY sp_flag_mst
+    ADD CONSTRAINT sp_flag_mst_pkey PRIMARY KEY (sp_flag);
+
+
+--
+-- Name: tb_flag_mst_pkey; Type: CONSTRAINT; Schema: sub_mst; Owner: naoya; Tablespace: 
+--
+
+ALTER TABLE ONLY tb_flag_mst
+    ADD CONSTRAINT tb_flag_mst_pkey PRIMARY KEY (tb_flag);
+
+
+SET search_path = processed, pg_catalog;
+
+--
+-- Name: jiten_data_adv_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY jiten_data
+    ADD CONSTRAINT jiten_data_adv_code_fkey FOREIGN KEY (adv_code) REFERENCES m_cm_tv_advertiser(adv_code);
+
+
+--
+-- Name: jiten_data_adv_type_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY jiten_data
+    ADD CONSTRAINT jiten_data_adv_type_fkey FOREIGN KEY (adv_type) REFERENCES sub_mst.adv_type_mst(adv_type);
+
+
+--
+-- Name: jiten_data_brand_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY jiten_data
+    ADD CONSTRAINT jiten_data_brand_code_fkey FOREIGN KEY (brand_code) REFERENCES m_cm_tv_brand(brand_code);
+
+
+--
+-- Name: jiten_data_station_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY jiten_data
+    ADD CONSTRAINT jiten_data_station_code_fkey FOREIGN KEY (station_code) REFERENCES sta_mst(station_code);
+
+
+--
+-- Name: m_cm_tv_brand_adv_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: b4
+--
+
+ALTER TABLE ONLY m_cm_tv_brand
+    ADD CONSTRAINT m_cm_tv_brand_adv_code_fkey FOREIGN KEY (adv_code) REFERENCES m_cm_tv_advertiser(adv_code);
+
+
+--
+-- Name: tv_play_p_cv_action_date_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_play_p_cv
+    ADD CONSTRAINT tv_play_p_cv_action_date_fkey FOREIGN KEY (action_date, house_num) REFERENCES tv_sample_p_cv(sample_date, house_num);
+
+
+--
+-- Name: tv_play_p_cv_action_day_week_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_play_p_cv
+    ADD CONSTRAINT tv_play_p_cv_action_day_week_fkey FOREIGN KEY (action_day_week) REFERENCES sub_mst.day_week_mst(day_week);
+
+
+--
+-- Name: tv_play_p_cv_station_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_play_p_cv
+    ADD CONSTRAINT tv_play_p_cv_station_code_fkey FOREIGN KEY (station_code) REFERENCES sta_mst(station_code);
+
+
+--
+-- Name: tv_program_ban_code1_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_program
+    ADD CONSTRAINT tv_program_ban_code1_fkey FOREIGN KEY (ban_code1, ban_code2, ban_code3) REFERENCES bancluster_mst(ban_code1, ban_code2, ban_code3);
+
+
+--
+-- Name: tv_program_br_format_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_program
+    ADD CONSTRAINT tv_program_br_format_fkey FOREIGN KEY (br_format) REFERENCES sub_mst.br_format_mst(br_format);
+
+
+--
+-- Name: tv_program_sin_toku_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_program
+    ADD CONSTRAINT tv_program_sin_toku_fkey FOREIGN KEY (sin_toku) REFERENCES sub_mst.sin_toku_mst(sin_toku);
+
+
+--
+-- Name: tv_program_station_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_program
+    ADD CONSTRAINT tv_program_station_code_fkey FOREIGN KEY (station_code) REFERENCES sta_mst(station_code);
+
+
+--
+-- Name: add_data; Type: ACL; Schema: -; Owner: naoya
+--
+
+REVOKE ALL ON SCHEMA add_data FROM PUBLIC;
+REVOKE ALL ON SCHEMA add_data FROM naoya;
+GRANT ALL ON SCHEMA add_data TO naoya;
+GRANT ALL ON SCHEMA add_data TO b4;
+
+
+--
+-- Name: original; Type: ACL; Schema: -; Owner: naoya
+--
+
+REVOKE ALL ON SCHEMA original FROM PUBLIC;
+REVOKE ALL ON SCHEMA original FROM naoya;
+GRANT ALL ON SCHEMA original TO naoya;
+GRANT ALL ON SCHEMA original TO PUBLIC;
+GRANT ALL ON SCHEMA original TO m1;
+GRANT ALL ON SCHEMA original TO b4;
+
+
+--
+-- Name: processed; Type: ACL; Schema: -; Owner: naoya
+--
+
+REVOKE ALL ON SCHEMA processed FROM PUBLIC;
+REVOKE ALL ON SCHEMA processed FROM naoya;
+GRANT ALL ON SCHEMA processed TO naoya;
+GRANT ALL ON SCHEMA processed TO m1;
+GRANT ALL ON SCHEMA processed TO b4;
+
+
+--
+-- Name: sub_mst; Type: ACL; Schema: -; Owner: naoya
+--
+
+REVOKE ALL ON SCHEMA sub_mst FROM PUBLIC;
+REVOKE ALL ON SCHEMA sub_mst FROM naoya;
+GRANT ALL ON SCHEMA sub_mst TO naoya;
+GRANT ALL ON SCHEMA sub_mst TO b4;
+
+
+SET search_path = original, pg_catalog;
+
+--
+-- Name: bancluster_mst; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE bancluster_mst FROM PUBLIC;
+REVOKE ALL ON TABLE bancluster_mst FROM naoya;
+GRANT ALL ON TABLE bancluster_mst TO naoya;
+GRANT ALL ON TABLE bancluster_mst TO m1;
+GRANT ALL ON TABLE bancluster_mst TO b4;
+
+
+--
+-- Name: jiten_data; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE jiten_data FROM PUBLIC;
+REVOKE ALL ON TABLE jiten_data FROM naoya;
+GRANT ALL ON TABLE jiten_data TO naoya;
+GRANT ALL ON TABLE jiten_data TO m1;
+GRANT ALL ON TABLE jiten_data TO b4;
+
+
+--
+-- Name: job_mst; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE job_mst FROM PUBLIC;
+REVOKE ALL ON TABLE job_mst FROM naoya;
+GRANT ALL ON TABLE job_mst TO naoya;
+GRANT ALL ON TABLE job_mst TO m1;
+GRANT ALL ON TABLE job_mst TO b4;
+
+
+--
+-- Name: m_cm_tv_advertiser; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE m_cm_tv_advertiser FROM PUBLIC;
+REVOKE ALL ON TABLE m_cm_tv_advertiser FROM naoya;
+GRANT ALL ON TABLE m_cm_tv_advertiser TO naoya;
+GRANT ALL ON TABLE m_cm_tv_advertiser TO m1;
+GRANT ALL ON TABLE m_cm_tv_advertiser TO b4;
+
+
+--
+-- Name: m_cm_tv_brand; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE m_cm_tv_brand FROM PUBLIC;
+REVOKE ALL ON TABLE m_cm_tv_brand FROM naoya;
+GRANT ALL ON TABLE m_cm_tv_brand TO naoya;
+GRANT ALL ON TABLE m_cm_tv_brand TO m1;
+GRANT ALL ON TABLE m_cm_tv_brand TO b4;
+
+
+--
+-- Name: sta_mst; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE sta_mst FROM PUBLIC;
+REVOKE ALL ON TABLE sta_mst FROM naoya;
+GRANT ALL ON TABLE sta_mst TO naoya;
+GRANT ALL ON TABLE sta_mst TO m1;
+GRANT ALL ON TABLE sta_mst TO b4;
+
+
+--
+-- Name: tv_program; Type: ACL; Schema: original; Owner: naoya
+--
+
+REVOKE ALL ON TABLE tv_program FROM PUBLIC;
+REVOKE ALL ON TABLE tv_program FROM naoya;
+GRANT ALL ON TABLE tv_program TO naoya;
+GRANT ALL ON TABLE tv_program TO m1;
+GRANT ALL ON TABLE tv_program TO b4;
+
+
+SET search_path = sub_mst, pg_catalog;
+
+--
+-- Name: day_week_mst; Type: ACL; Schema: sub_mst; Owner: naoya
+--
+
+REVOKE ALL ON TABLE day_week_mst FROM PUBLIC;
+REVOKE ALL ON TABLE day_week_mst FROM naoya;
+GRANT ALL ON TABLE day_week_mst TO naoya;
+GRANT ALL ON TABLE day_week_mst TO b4;
+
+
+--
+-- Greenplum Database database dump complete
+--
+

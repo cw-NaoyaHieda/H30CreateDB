@@ -1,0 +1,43 @@
+SELECT
+    MAX(LENGTH(ban_code1))AS code1_lengthmax,
+    MIN(LENGTH(ban_code1))AS code1_lengthmin,
+    MAX(LENGTH(ban_code2))AS code2_lengthmax,
+    MIN(LENGTH(ban_code2))AS code2_lengthmin,
+    MAX(LENGTH(ban_code3))AS code3_lengthmax,
+    MIN(LENGTH(ban_code3))AS code3_lengthmin,
+	MAX(LENGTH(ban_name))AS name_lengthmax,
+    MIN(LENGTH(ban_name))AS name_lengthmin,
+    SUM (CASE WHEN ban_code1 IS NULL THEN 1 ELSE 0 END) AS code1_nll,
+    SUM (CASE WHEN ban_code2 IS NULL THEN 1 ELSE 0 END) AS code2_null,
+    SUM (CASE WHEN ban_code3 IS NULL THEN 1 ELSE 0 END ) AS code3_null,
+	SUM (CASE WHEN ban_name IS NULL THEN 1 ELSE 0 END ) AS name_null,
+    SUM (CASE WHEN ban_code1 = '' THEN 1 ELSE 0 END) AS code1_emp,
+    SUM (CASE WHEN ban_code2 = '' THEN 1 ELSE 0 END) AS code2_emp,
+    SUM (CASE WHEN ban_code3 = '' THEN 1 ELSE 0 END ) AS code3_emp,
+	SUM (CASE WHEN ban_name = '' THEN 1 ELSE 0 END ) AS name_emp,
+    COUNT(DISTINCT ban_code1)AS code1_dist,
+    COUNT(DISTINCT ban_code2)AS code2_dist,
+    COUNT(DISTINCT ban_code3)AS code3_dist,
+	COUNT(DISTINCT ban_name)AS name_dist
+FROM original.bancluster_mst;
+
+SELECT
+    MAX(ban_code1)AS code1_max,
+    MIN(ban_code1)AS code1_min,
+    MAX(ban_code2)AS code2_max,
+    MIN(ban_code2)AS code2_min,
+    MAX(LENGTH(ban_code3))AS code3_lengthmax,
+    MIN(LENGTH(ban_code3))AS code3_lengthmin,
+	MAX(LENGTH(ban_name))AS name_lengthmax,
+    MIN(LENGTH(ban_name))AS name_lengthmin,
+    SUM (CASE WHEN ban_code1 IS NULL THEN 1 ELSE 0 END) AS code1_nll,
+    SUM (CASE WHEN ban_code2 IS NULL THEN 1 ELSE 0 END) AS code2_null,
+    SUM (CASE WHEN ban_code3 IS NULL THEN 1 ELSE 0 END ) AS code3_null,
+	SUM (CASE WHEN ban_name IS NULL THEN 1 ELSE 0 END ) AS name_null,
+    SUM (CASE WHEN ban_code3 = '' THEN 1 ELSE 0 END ) AS code3_emp,
+	SUM (CASE WHEN ban_name = '' THEN 1 ELSE 0 END ) AS name_emp,
+    COUNT(DISTINCT ban_code1)AS code1_dist,
+    COUNT(DISTINCT ban_code2)AS code2_dist,
+    COUNT(DISTINCT ban_code3)AS code3_dist,
+	COUNT(DISTINCT ban_name)AS name_dist
+FROM processed.bancluster_mst;
