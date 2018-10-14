@@ -315,7 +315,33 @@ CREATE TABLE top10_rating_tv_tmp (
 
 ALTER TABLE add_data.top10_rating_tv_tmp OWNER TO naoya;
 
+SET search_path = processed, pg_catalog;
+
+--
+-- Name: profiledata; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE profiledata (
+    house_num integer NOT NULL,
+    qu_genre_code integer NOT NULL,
+    question_code integer NOT NULL,
+    answer_code integer NOT NULL
+) DISTRIBUTED BY (house_num, qu_genre_code, question_code, answer_code);
+
+
+ALTER TABLE processed.profiledata OWNER TO naoya;
+
 SET search_path = edit, pg_catalog;
+
+--
+-- Name: qu_genre_code1; Type: VIEW; Schema: edit; Owner: b4
+--
+
+CREATE VIEW qu_genre_code1 AS
+    SELECT profiledata.house_num, profiledata.qu_genre_code, profiledata.question_code, profiledata.answer_code FROM processed.profiledata WHERE (profiledata.qu_genre_code = 1);
+
+
+ALTER TABLE edit.qu_genre_code1 OWNER TO b4;
 
 --
 -- Name: tv_orgn_p_cv; Type: TABLE; Schema: edit; Owner: naoya; Tablespace: 
@@ -336,6 +362,64 @@ CREATE TABLE tv_orgn_p_cv (
 
 
 ALTER TABLE edit.tv_orgn_p_cv OWNER TO naoya;
+
+SET search_path = processed, pg_catalog;
+
+--
+-- Name: tv_orgn_p_cv; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_orgn_p_cv (
+    br_start_datetime timestamp without time zone NOT NULL,
+    br_end_datetime timestamp without time zone NOT NULL,
+    br_day_week integer,
+    house_num integer NOT NULL,
+    station_code integer NOT NULL,
+    tv_num integer NOT NULL,
+    data_agg_type integer NOT NULL,
+    dataseq integer NOT NULL,
+    br_date date
+) DISTRIBUTED BY (br_start_datetime, br_end_datetime, house_num, station_code, tv_num, data_agg_type, dataseq);
+
+
+ALTER TABLE processed.tv_orgn_p_cv OWNER TO naoya;
+
+--
+-- Name: tv_program; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+--
+
+CREATE TABLE tv_program (
+    station_code integer NOT NULL,
+    program_code character(4) NOT NULL,
+    program_day_week integer,
+    program_date date NOT NULL,
+    program_start_time timestamp without time zone,
+    program_time integer,
+    program_end_time timestamp without time zone,
+    ban_code1 integer,
+    ban_code2 integer,
+    ban_code3 character(3),
+    sin_toku character(1),
+    br_format integer,
+    final_code integer,
+    program_name character(41),
+    program_name_kana character(20)
+) DISTRIBUTED BY (station_code, program_code, program_date);
+
+
+ALTER TABLE processed.tv_program OWNER TO naoya;
+
+SET search_path = edit, pg_catalog;
+
+--
+-- Name: tv_orgn_program; Type: VIEW; Schema: edit; Owner: naoya
+--
+
+CREATE VIEW tv_orgn_program AS
+    SELECT a.house_num, b.program_name, b.station_code, CASE WHEN ('00:00:00'::interval < (a.br_start_datetime - b.program_start_time)) THEN CASE WHEN ('00:00:00'::interval < (a.br_end_datetime - b.program_end_time)) THEN (b.program_end_time - a.br_start_datetime) ELSE (a.br_end_datetime - a.br_start_datetime) END WHEN ('00:00:00'::interval < (b.program_start_time - a.br_start_datetime)) THEN CASE WHEN ('00:00:00'::interval < (a.br_end_datetime - b.program_end_time)) THEN (b.program_end_time - b.program_start_time) ELSE (a.br_end_datetime - b.program_start_time) END ELSE '00:00:00'::interval END AS watch_time, b.program_start_time, b.program_time FROM (processed.tv_orgn_p_cv a LEFT JOIN processed.tv_program b ON (((('00:00:00'::interval < (a.br_start_datetime - b.program_start_time)) AND ((a.br_start_datetime - b.program_start_time) < (b.program_end_time - b.program_start_time))) OR (('00:00:00'::interval < (b.program_start_time - a.br_start_datetime)) AND ((b.program_start_time - a.br_start_datetime) < (a.br_end_datetime - a.br_start_datetime))))));
+
+
+ALTER TABLE edit.tv_orgn_program OWNER TO naoya;
 
 SET search_path = original, pg_catalog;
 
@@ -457,56 +541,6 @@ CREATE TABLE sta_mst (
 
 
 ALTER TABLE original.sta_mst OWNER TO naoya;
-
---
--- Name: t_weblog2; Type: TABLE; Schema: original; Owner: m1; Tablespace: 
---
-
-CREATE TABLE t_weblog2 (
-    house_num character(100),
-    ind_num character(100),
-    web_date character(100),
-    web_start_time character(100),
-    pc_flag character(100),
-    sp_flag character(100),
-    tb_flag character(100),
-    url text,
-    domain text,
-    sub_domain character(100),
-    user_agent text,
-    referrer text,
-    referrer_domain character(100),
-    web_title text,
-    web_time character(100)
-) DISTRIBUTED BY (house_num);
-
-
-ALTER TABLE original.t_weblog2 OWNER TO m1;
-
---
--- Name: t_weblog3; Type: TABLE; Schema: original; Owner: m1; Tablespace: 
---
-
-CREATE TABLE t_weblog3 (
-    house_num character(100),
-    ind_num character(100),
-    web_date character(100),
-    web_start_time character(100),
-    pc_flag character(100),
-    sp_flag character(100),
-    tb_flag character(100),
-    url text,
-    domain text,
-    sub_domain character(100),
-    user_agent text,
-    referrer text,
-    referrer_domain character(100),
-    web_title text,
-    web_time character(100)
-) DISTRIBUTED BY (house_num);
-
-
-ALTER TABLE original.t_weblog3 OWNER TO m1;
 
 --
 -- Name: tv_orgn_p_cv; Type: TABLE; Schema: original; Owner: naoya; Tablespace: 
@@ -668,20 +702,6 @@ CREATE TABLE m_cm_tv_brand (
 ALTER TABLE processed.m_cm_tv_brand OWNER TO b4;
 
 --
--- Name: profiledata; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
---
-
-CREATE TABLE profiledata (
-    house_num integer NOT NULL,
-    qu_genre_code integer NOT NULL,
-    question_code integer NOT NULL,
-    answer_code integer NOT NULL
-) DISTRIBUTED BY (house_num, qu_genre_code, question_code, answer_code);
-
-
-ALTER TABLE processed.profiledata OWNER TO naoya;
-
---
 -- Name: profilemaster; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
 --
 
@@ -712,23 +732,28 @@ CREATE TABLE sta_mst (
 ALTER TABLE processed.sta_mst OWNER TO b4;
 
 --
--- Name: tv_orgn_p_cv; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+-- Name: t_weblog; Type: TABLE; Schema: processed; Owner: m1; Tablespace: 
 --
 
-CREATE TABLE tv_orgn_p_cv (
-    br_start_datetime timestamp without time zone NOT NULL,
-    br_end_datetime timestamp without time zone NOT NULL,
-    br_day_week integer,
-    house_num character(5) NOT NULL,
-    station_code integer NOT NULL,
-    tv_num integer NOT NULL,
-    data_agg_type integer NOT NULL,
-    dataseq integer NOT NULL,
-    br_date date
-) DISTRIBUTED BY (br_start_datetime, br_end_datetime, house_num, station_code, tv_num, data_agg_type, dataseq);
+CREATE TABLE t_weblog (
+    house_num integer NOT NULL,
+    web_date date NOT NULL,
+    web_start_datetime timestamp without time zone NOT NULL,
+    pc_flag integer,
+    sp_flag integer,
+    tb_flag integer,
+    url text NOT NULL,
+    domain text,
+    sub_domain text,
+    user_agent text NOT NULL,
+    referrer text NOT NULL,
+    referrer_domain text,
+    web_title text NOT NULL,
+    web_time integer NOT NULL
+) DISTRIBUTED BY (house_num, web_date, web_start_datetime, url, user_agent, referrer, web_title, web_time);
 
 
-ALTER TABLE processed.tv_orgn_p_cv OWNER TO naoya;
+ALTER TABLE processed.t_weblog OWNER TO m1;
 
 --
 -- Name: tv_orgn_p_cv_view; Type: VIEW; Schema: processed; Owner: naoya
@@ -747,7 +772,7 @@ ALTER TABLE processed.tv_orgn_p_cv_view OWNER TO naoya;
 CREATE TABLE tv_play_p_cv (
     action_datetime timestamp without time zone NOT NULL,
     action_day_week integer,
-    house_num character(5) NOT NULL,
+    house_num integer NOT NULL,
     tv_num integer,
     station_code integer,
     timeshift_datetime timestamp without time zone,
@@ -770,31 +795,6 @@ CREATE VIEW tv_play_p_cv_view AS
 ALTER TABLE processed.tv_play_p_cv_view OWNER TO naoya;
 
 --
--- Name: tv_program; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
---
-
-CREATE TABLE tv_program (
-    station_code integer NOT NULL,
-    program_code character(4) NOT NULL,
-    program_day_week integer,
-    program_date date NOT NULL,
-    program_start_time timestamp without time zone,
-    program_time integer,
-    program_end_time timestamp without time zone,
-    ban_code1 integer,
-    ban_code2 integer,
-    ban_code3 character(3),
-    sin_toku character(1),
-    br_format integer,
-    final_code integer,
-    program_name character(41),
-    program_name_kana character(20)
-) DISTRIBUTED BY (station_code, program_code, program_date);
-
-
-ALTER TABLE processed.tv_program OWNER TO naoya;
-
---
 -- Name: tv_program_view; Type: VIEW; Schema: processed; Owner: naoya
 --
 
@@ -805,12 +805,12 @@ CREATE VIEW tv_program_view AS
 ALTER TABLE processed.tv_program_view OWNER TO naoya;
 
 --
--- Name: tv_sample_p_cv; Type: TABLE; Schema: processed; Owner: naoya; Tablespace: 
+-- Name: tv_sample_p_cv; Type: TABLE; Schema: processed; Owner: m1; Tablespace: 
 --
 
 CREATE TABLE tv_sample_p_cv (
     sample_date date NOT NULL,
-    house_num character(5) NOT NULL,
+    house_num integer NOT NULL,
     house_hold integer,
     sex integer,
     marriage integer,
@@ -819,7 +819,7 @@ CREATE TABLE tv_sample_p_cv (
 ) DISTRIBUTED BY (sample_date, house_num);
 
 
-ALTER TABLE processed.tv_sample_p_cv OWNER TO naoya;
+ALTER TABLE processed.tv_sample_p_cv OWNER TO m1;
 
 SET search_path = sub_mst, pg_catalog;
 
@@ -1060,6 +1060,14 @@ ALTER TABLE ONLY sta_mst
 
 
 --
+-- Name: t_weblog_pkey; Type: CONSTRAINT; Schema: processed; Owner: m1; Tablespace: 
+--
+
+ALTER TABLE ONLY t_weblog
+    ADD CONSTRAINT t_weblog_pkey PRIMARY KEY (house_num, web_date, web_start_datetime, url, user_agent, referrer, web_title, web_time);
+
+
+--
 -- Name: tv_orgn_p_cv_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
 --
 
@@ -1084,7 +1092,7 @@ ALTER TABLE ONLY tv_program
 
 
 --
--- Name: tv_sample_p_cv_pkey; Type: CONSTRAINT; Schema: processed; Owner: naoya; Tablespace: 
+-- Name: tv_sample_p_cv_pkey; Type: CONSTRAINT; Schema: processed; Owner: m1; Tablespace: 
 --
 
 ALTER TABLE ONLY tv_sample_p_cv
@@ -1208,6 +1216,30 @@ ALTER TABLE ONLY m_cm_tv_brand
 
 
 --
+-- Name: tv_orgn_p_cv_br_day_week_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_orgn_p_cv
+    ADD CONSTRAINT tv_orgn_p_cv_br_day_week_fkey FOREIGN KEY (br_day_week) REFERENCES sub_mst.day_week_mst(day_week);
+
+
+--
+-- Name: tv_orgn_p_cv_data_agg_type_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_orgn_p_cv
+    ADD CONSTRAINT tv_orgn_p_cv_data_agg_type_fkey FOREIGN KEY (data_agg_type) REFERENCES sub_mst.data_agg_type_mst(data_agg_type);
+
+
+--
+-- Name: tv_orgn_p_cv_house_num_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
+--
+
+ALTER TABLE ONLY tv_orgn_p_cv
+    ADD CONSTRAINT tv_orgn_p_cv_house_num_fkey FOREIGN KEY (house_num, br_date) REFERENCES tv_sample_p_cv(house_num, sample_date);
+
+
+--
 -- Name: tv_play_p_cv_action_date_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: naoya
 --
 
@@ -1264,6 +1296,22 @@ ALTER TABLE ONLY tv_program
 
 
 --
+-- Name: tv_sample_p_cv_house_hold_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: m1
+--
+
+ALTER TABLE ONLY tv_sample_p_cv
+    ADD CONSTRAINT tv_sample_p_cv_house_hold_fkey FOREIGN KEY (house_hold) REFERENCES sub_mst.house_hold_mst(house_hold);
+
+
+--
+-- Name: tv_sample_p_cv_job_code_fkey; Type: FK CONSTRAINT; Schema: processed; Owner: m1
+--
+
+ALTER TABLE ONLY tv_sample_p_cv
+    ADD CONSTRAINT tv_sample_p_cv_job_code_fkey FOREIGN KEY (job_code) REFERENCES job_mst(job_code);
+
+
+--
 -- Name: add_data; Type: ACL; Schema: -; Owner: naoya
 --
 
@@ -1294,6 +1342,16 @@ REVOKE ALL ON SCHEMA processed FROM naoya;
 GRANT ALL ON SCHEMA processed TO naoya;
 GRANT ALL ON SCHEMA processed TO m1;
 GRANT ALL ON SCHEMA processed TO b4;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: naoya
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM naoya;
+GRANT ALL ON SCHEMA public TO naoya;
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
