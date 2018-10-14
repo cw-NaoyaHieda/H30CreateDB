@@ -41,13 +41,13 @@ copy original.tv_play_p_cv from '/home/naoya/Desktop/H30data_1011/tv_play/tv_pla
 copy original.tv_play_p_cv from '/home/naoya/Desktop/H30data_1011/tv_play/tv_play_p_cv_0002_part_00.csv' with csv;
 copy original.tv_play_p_cv from '/home/naoya/Desktop/H30data_1011/tv_play/tv_play_p_cv_0003_part_00.csv' with csv;
 
-DELETE original.profiledata;
+DELETE FROM original.profiledata;
 COPY
   original.profiledata
 FROM
   '/home/naoya/Desktop/H30data_1011/ProfileData_2.csv' WITH CSV;
 
-DELETE original.profilemaster;
+DELETE FROM original.profilemaster;
 COPY
   original.profilemaster
 FROM
